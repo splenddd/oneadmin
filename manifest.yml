@@ -1,7 +1,8 @@
 ---
 applications:
  - name: oneadmin
-   random-route: true
    memory: 256M
-   buildpack: python_buildpack
-   host: oneadmin
+   buildpacks:
+     - python-buildpack
+   routes:
+   - route: oneadmin.us-south.cf.appdomain.cloud
