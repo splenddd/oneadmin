@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>用户名</th>
+        <th>邮箱</th>
+        <th>订阅</th>
+        <th>状态</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if users %}
+    {% for user in users['value'] %}
+    <tr>
+        <td>{{ user.displayName }}</td>
+        <td>{{ user.userPrincipalName }}</td>
+        <td>
+            {% for licenses in user['assignedLicenses'] %}
+            {{ get_licenses(licenses['skuId']) }}
+            {% endfor %}
+        </td>
+        <td><i class="icon {{ 'icon-check text-success' if user.accountEnabled else 'icon-cross text-error' }}"></i></td>
+        <td>
+            <a data-href="{{ url_for('index', account=account, id=user.id, action='status', _external=True) }}" href="javascript:void(0);">{{ '禁用' if user.accountEnabled else '启用' }}</a>
+            <a data-href="{{ url_for('index', account=account, id=user.id, action='detail', _external=True) }}" href="javascript:void(0);">详情</a>
+        </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+{% endblock %}

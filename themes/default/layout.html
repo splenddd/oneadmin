@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/spectre.min.css') }}?v={{ t }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}?v={{ t }}">
+<title>PyIndex</title>
+<body>
+<div class="left">
+    <ul class="menu">
+        {% for account in accounts %}
+        <li class="menu-item"><a href="/{{ account }}">{{ account }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="right">
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+</body>
+</html>

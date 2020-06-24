@@ -1,0 +1,79 @@
+html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: "Cereal", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #fff;
+    font-size: 14px;
+    color: #001f3f;
+}
+
+::-webkit-input-placeholder, ::-moz-placeholder, :-ms-input-placeholder, input:-moz-placeholder {
+    color: #a3afb7;
+}
+
+*:hover, *:focus {
+    outline: none !important;
+}
+
+a {
+    color: #585663;
+}
+
+a:visited {
+    color: unset;
+}
+
+a:hover, a:active {
+    color: #f36;
+    text-decoration: none;
+}
+
+a:focus {
+    box-shadow: none;
+    text-decoration: none;
+}
+
+.left {
+    background: #2d353c;
+    position: fixed;
+    z-index: 111;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+}
+
+.right {
+    margin-left: 220px;
+    background: #fff;
+    position: relative;
+}
+
+.table th {
+    background: #ecf0f2;
+    border-right: 1px solid #fcfcfc;
+    color: #626f7e;
+    border-top: none !important;
+    border-bottom: none !important
+}
+
+.table td {
+    border-bottom: 1px solid #e7ebed;
+    border-top: none !important;
+    vertical-align: middle !important;
+}
+
+.table td, .table th {
+    text-align: center;
+    padding: .2rem .3rem;
+}
+
+.table td a {
+    padding: 0 5px
+}

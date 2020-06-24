@@ -1,0 +1,5 @@
+---
+applications:
+ - name: oneadmin
+   random-route: true
+   memory: 256M
