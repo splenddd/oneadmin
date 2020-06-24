@@ -3,3 +3,5 @@ applications:
  - name: oneadmin
    random-route: true
    memory: 256M
+   buildpack: python_buildpack
+   host: oneadmin
