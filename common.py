@@ -12,9 +12,9 @@ LICENSES_MAP = {
     '6fd2c87f-b296-42f0-b197-1e91e994b900': 'Office365E3'
 }
 
-account_name = os.environ.get('ACCOUNT_NAME', '633cbc5a-dd68-45c4-8e85-1d9e056c0d8a-bluemix')
-api_key = os.environ.get('API_KEY', '6hW0XBfz8N52wesCwFRvbars2-6z08qhXuTueGvmKMcG')
-db_name = os.environ.get('DB_NAME', 'db-1')
+account_name = os.environ.get('ACCOUNT_NAME')
+api_key = os.environ.get('API_KEY')
+db_name = os.environ.get('DB_NAME')
 client = Cloudant.iam(account_name, api_key, connect=True)
 if db_name in client:
     db = client[db_name]

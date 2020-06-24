@@ -1,14 +1,10 @@
 import json
 import logging
-import os
 import random
-import re
 import string
-import time
 from urllib.parse import urlencode
 
 import requests
-from cloudant import Cloudant
 
 
 class OneDrive:
@@ -180,33 +176,6 @@ class OneDrive:
 
         result = response.json()
         raise Exception(response.url, response.status_code, result['error']['message'])
-
-
-def main():
-    one = OneDrive()
-    # account_name = os.environ.get('ACCOUNT_NAME', '633cbc5a-dd68-45c4-8e85-1d9e056c0d8a-bluemix')
-    # api_key = os.environ.get('API_KEY', '6hW0XBfz8N52wesCwFRvbars2-6z08qhXuTueGvmKMcG')
-    # db_name = os.environ.get('DB_NAME', 'db-2')
-    # client = Cloudant.iam(account_name, api_key, connect=True)
-    # if db_name in client:
-    #     db = client[db_name]
-    # else:
-    #     db = client.create_database(db_name)
-    # print(db)
-
-    # for document in db:
-    #     _id = document['_id']
-    #     _account = re.search(r'one_drive_admin_([\w]+)_session', _id).group(1)
-    #     if document['expires_time'] > int(time.time()):
-    #         data = one.refresh_token(**document)
-    #         document['access_token'] = data['access_token']
-    #         document['auth_type'] = 'oauth'
-    #         document['expires_time'] = int(time.time()) + 3500
-    #         if data['refresh_token']:
-    #             document['refresh_token'] = data['refresh_token']
-    #         document.save()
-    #     one._drive_access = document
-    #     print(json.dumps(one.get_users(), indent=4))
 
 
 if __name__ == '__main__':
