@@ -3,6 +3,6 @@ applications:
  - name: oneadmin
    memory: 256M
    buildpacks:
-     - python-buildpack
+     - https://github.com/cloudfoundry/python-buildpack.git
    routes:
    - route: oneadmin.us-south.cf.appdomain.cloud
