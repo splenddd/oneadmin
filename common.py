@@ -1,9 +1,9 @@
-import os
 import re
 import time
 
 from cloudant import Cloudant
 
+from config import *
 from one_drive import OneDrive
 
 LICENSES_MAP = {
@@ -13,20 +13,18 @@ LICENSES_MAP = {
     'c42b9cae-ea4f-4ab7-9717-81576235ccac': 'Office 365 E5'
 }
 
-account_name = os.environ.get('ACCOUNT_NAME')
-api_key = os.environ.get('API_KEY')
-db_name = os.environ.get('DB_NAME')
+
 one = OneDrive()
 
 
 class DB:
 
     def __init__(self):
-        self.client = Cloudant.iam(account_name, api_key, connect=True)
-        if db_name in self.client:
-            self.db = self.client[db_name]
+        self.client = Cloudant.iam(ACCOUNT_NAME, API_KEY, connect=True)
+        if DB_NAME in self.client:
+            self.db = self.client[DB_NAME]
         else:
-            self.db = self.client.create_database(db_name)
+            self.db = self.client.create_database(DB_NAME)
 
     def __enter__(self):
         return self.db

@@ -1,0 +1,5 @@
+ADMIN_NAME = 'root'
+ADMIN_PASSWORD = '1234567'
+ACCOUNT_NAME = ''
+API_KEY = ''
+DB_NAME = 'db-1'

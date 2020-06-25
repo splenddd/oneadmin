@@ -1,14 +1,19 @@
 import os
 import time
 
-from flask import Flask, render_template, redirect, request, session
+from flask import Flask, render_template, redirect, request, session, jsonify
+from flask_basicauth import BasicAuth
 
 from common import get_users, LICENSES_MAP, enabled_user, get_user, create_user, delete_user, get_users_page
+from config import *
 
 theme = 'default'
 template_folder = f'themes/{theme}'
 app = Flask(__name__, template_folder=template_folder, static_folder=template_folder)
 app.secret_key = '8d9845a4-b6b6-11ea-87d2-acbc327cb9c7'
+app.config['BASIC_AUTH_USERNAME'] = ADMIN_NAME
+app.config['BASIC_AUTH_PASSWORD'] = ADMIN_PASSWORD
+basic_auth = BasicAuth(app)
 
 
 @app.route('/install')
@@ -17,8 +22,9 @@ def install():
 
 
 @app.route('/debug')
+@basic_auth.required
 def debug():
-    print(os.environ)
+    return jsonify(dict(os.environ))
 
 
 @app.route('/favicon.ico')
@@ -27,6 +33,7 @@ def favicon():
 
 
 @app.route('/<account>/add', methods=['GET', 'POST'])
+@basic_auth.required
 def add_action(account):
     if request.method.lower() == 'get':
         return render_template('create_user.html', account=account)
@@ -38,6 +45,7 @@ def add_action(account):
 
 
 @app.route('/<account>/<uid>/<action>')
+@basic_auth.required
 def user_action(account, uid, action):
     if action == 'detail':
         return get_user(account, uid)
@@ -52,6 +60,7 @@ def user_action(account, uid, action):
 @app.route('/')
 @app.route('/<account>')
 @app.route('/<account>/<page>')
+@basic_auth.required
 def index(account=None, page=None):
     accounts = ['linbing01', 'vpsmm', 'liyujuan']
     if accounts and len(accounts):
