@@ -4,6 +4,7 @@ import time
 
 from cloudant import Cloudant
 
+from config import ACCOUNT_NAME, API_KEY, DB_NAME
 from one_drive import OneDrive
 
 LICENSES_MAP = {
@@ -13,9 +14,9 @@ LICENSES_MAP = {
     'c42b9cae-ea4f-4ab7-9717-81576235ccac': 'Office 365 E5'
 }
 
-account_name = os.environ.get('ACCOUNT_NAME')
-api_key = os.environ.get('API_KEY')
-db_name = os.environ.get('DB_NAME')
+account_name = os.environ.get('ACCOUNT_NAME', ACCOUNT_NAME)
+api_key = os.environ.get('API_KEY', API_KEY)
+db_name = os.environ.get('DB_NAME', DB_NAME)
 one = OneDrive()
 
 

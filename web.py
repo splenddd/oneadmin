@@ -12,8 +12,8 @@ theme = 'default'
 template_folder = f'themes/{theme}'
 app = Flask(__name__, template_folder=template_folder, static_folder=template_folder)
 app.secret_key = '8d9845a4-b6b6-11ea-87d2-acbc327cb9c7'
-app.config['BASIC_AUTH_USERNAME'] = ADMIN_NAME
-app.config['BASIC_AUTH_PASSWORD'] = ADMIN_PASSWORD
+app.config['BASIC_AUTH_USERNAME'] = os.environ.get('ADMIN_NAME', ADMIN_NAME)
+app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('ADMIN_PASSWORD', ADMIN_PASSWORD)
 basic_auth = BasicAuth(app)
 
 
