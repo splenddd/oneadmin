@@ -5,20 +5,25 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="renderer" content="webkit">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/spectre.min.css') }}?v={{ t }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/spectre.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}?v={{ t }}">
-<title>PyIndex</title>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}?v={{ t }}"></script>
+<title>{{ config.APP_TITLE }}</title>
 <body>
-<div class="left">
-    <ul class="menu">
-        {% for account in accounts %}
-        <li class="menu-item"><a href="/{{ account }}">{{ account }}</a></li>
-        {% endfor %}
-    </ul>
-</div>
-<div class="right">
-    <div class="container">
-        {% block content %}{% endblock %}
+<div class="main">
+    <div class="left">
+        <a href="/" class="navbar-brand">{{ config.APP_TITLE }}</a>
+        <ul class="menu">
+            {% for _account in accounts %}
+            <li class="menu-item{{ ' active' if account == _account else '' }}"><a href="/{{ _account }}">{{ _account }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="right">
+        <div class="container grid-lg">
+            {% block content %}{% endblock %}
+        </div>
     </div>
 </div>
 </body>

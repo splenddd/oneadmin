@@ -35,19 +35,22 @@ class OneDrive:
     def api_debug(self, api_sub_url, params=None, data=None, method=None, **kwargs):
         return json.dumps(self.api(api_sub_url, params, data, method, **kwargs), indent=4)
 
-    def enabled_user(self, user, password=None):
+    def enabled_user(self, user, status=True):
         post_data = {
-            'accountEnabled': True,
+            'accountEnabled': status,
             'usageLocation': 'HK',
         }
-        if self._auth_type == 'oauth':
-            if not password:
-                password = random.choices(string.ascii_letters + string.digits + '!#$%&()*+-/:;<=>?@', k=10)
-            post_data['passwordProfile'] = {
-                'password': password,
-                'forceChangePasswordNextSignIn': False
-            }
-            post_data['passwordPolicies'] = 'DisablePasswordExpiration, DisableStrongPassword'
+        return self.api(f'/users/{user}', json=post_data, method='PATCH')
+
+    def password(self, user, password=None):
+        if not password:
+            password = random.choices(string.ascii_letters + string.digits + '!#$%&()*+-/:;<=>?@', k=10)
+
+        post_data = {'passwordProfile': {
+            'password': password,
+            'forceChangePasswordNextSignIn': False,
+            'passwordPolicies': 'DisablePasswordExpiration, DisableStrongPassword'
+        }}
 
         return self.api(f'/users/{user}', json=post_data, method='PATCH')
 
@@ -56,12 +59,12 @@ class OneDrive:
         domain = self.get_default_domain()
         password = kwargs.get('password', ''.join(
             random.choices(string.ascii_letters + string.digits + '!#$%&()*+-/:;<=>?@', k=10)))
-        user_name = kwargs.get('user_name', ''.join(random.choices(string.ascii_letters, k=6)))
-        user_email = f'{user_name}@{domain}'
+        username = kwargs.get('username', ''.join(random.choices(string.ascii_letters, k=6)))
+        user_email = f'{username}@{domain}'
         post_data = {
             'accountEnabled': True,
-            'displayName': user_name,
-            'mailNickname': user_name,
+            'displayName': username,
+            'mailNickname': username,
             'passwordPolicies': 'DisablePasswordExpiration, DisableStrongPassword',
             'passwordProfile': {
                 'password': password,
@@ -109,12 +112,25 @@ class OneDrive:
         return result
 
     def get_users(self, **kwargs):
-        params = {'$select': 'id,displayName,accountEnabled,userPrincipalName,assignedLicenses'}
+        # id,displayName,accountEnabled,userPrincipalName,assignedLicenses
+        params = {'$select': '',
+                  '$expand': 'memberOf', '$top': 5, '$orderBy': 'displayName desc'}
         params.update(kwargs)
+        self._api_base_url = self._api_base_url.replace('v1.0', 'beta')
         return self.api('/users', params=params)
 
     def delete_user(self, user):
         return self.api(f'/users/{user}', method='DELETE')
+
+    def get_user(self, user):
+        params = {'$expand': 'memberOf'}
+        self._api_base_url = self._api_base_url.replace('v1.0', 'beta')
+        return self.api(f'/users/{user}', params=params)
+
+    def get_role(self, user):
+        params = {'$expand': 'directReports'}
+
+        return self.api(f'/users/{user}', params=params)
 
     def get_disabled_users(self):
         return self.get_users(filter='accountEnabled eq false')
@@ -179,4 +195,4 @@ class OneDrive:
 
 
 if __name__ == '__main__':
-    main()
+    pass

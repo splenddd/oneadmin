@@ -1,58 +1,172 @@
-html {
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+@charset "UTF-8";
+@font-face {
+    font-family: 'Satisfy';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Satisfy Regular'), local('Satisfy-Regular'), url(../fonts/satisfy.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-body {
-    font-family: "Cereal", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #fff;
+html {
     font-size: 14px;
-    color: #001f3f;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+body, html {
+    height: 100%;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #555555;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background: #868e96
 }
 
 ::-webkit-input-placeholder, ::-moz-placeholder, :-ms-input-placeholder, input:-moz-placeholder {
-    color: #a3afb7;
+    color: #d1d1d1;
 }
 
-*:hover, *:focus {
-    outline: none !important;
+body {
+    background: #fafbfc;
+    font-size: 1rem;
+}
+
+*, *.focus {
+    outline: 0
+}
+
+a, .btn, a:visited, a:link {
+    -webkit-transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -o-transition: all .4s ease;
+    transition: all .4s ease;
 }
 
 a {
-    color: #585663;
+    color: #333333;
+    outline: 0;
+    text-decoration: none;
+}
+
+a:hover, a:focus, a:active, a.hover:hover {
+    opacity: .9;
+    text-decoration: none;
+    color: #ff3366;
+    box-shadow: none;
+}
+
+a.hover:hover {
+    color: #ff3366 !important;
 }
 
 a:visited {
     color: unset;
+    text-decoration: none !important;
 }
 
-a:hover, a:active {
-    color: #f36;
-    text-decoration: none;
+.toast {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    background-color: rgba(0, 0, 0, .6);
+    transform: translate(-50%, -50%);
+    width: auto;
+    border-radius: .2rem;
+    border: none;
+    min-width: 100px;
+    text-align: center;
+    z-index: 1000;
 }
 
-a:focus {
-    box-shadow: none;
-    text-decoration: none;
+.main {
+    min-height: 100vh;
+    position: relative;
+    height: 100%;
+    display: flex;
+    display: -ms-flexbox;
+    -ms-flex-flow: nowrap;
+    flex-flow: nowrap;
 }
 
 .left {
-    background: #2d353c;
-    position: fixed;
-    z-index: 111;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 200px;
+    background: #3a3f51;
+    position: relative;
+    width: 15rem;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+}
+
+.left .navbar-brand {
+    font-family: 'satisfy', serif;
+    text-align: center;
+    font-size: 1.6rem;
+    display: block;
+    padding: 1rem;
+    color: #fff !important;
+    border-bottom: 1px solid #2e3344;
+    margin-bottom: 1rem;
+}
+
+
+.menu {
+    background: transparent;
+    padding: 0;
+}
+
+.menu .menu-item + .menu-item {
+    margin-top: 0;
+}
+
+.menu .menu-item {
+    padding: 0;
+}
+
+.menu .menu-item > a {
+    padding: .7rem 1.5rem;
+    -webkit-transition: background-color .2s ease-in-out 0s;
+    transition: background-color .2s ease-in-out 0s;
+    color: #b4b6bd;
+    margin: 0;
+}
+
+.menu .menu-item > a:focus, .menu .menu-item > a:hover {
+    background: #32374a;
+    color: #fff;
+}
+
+.menu .menu-item.active > a, .menu .menu-item.active > a:hover {
+    background: #2e3344;
+    color: #fff;
 }
 
 .right {
-    margin-left: 220px;
     background: #fff;
     position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding-top: 2rem;
+}
+
+.breadcrumb {
+    background: #ecf0f2;
+    margin: 0 0 2rem 0;
+    padding: .2rem 1rem;
+}
+
+.table {
+    margin-bottom: 1rem;
 }
 
 .table th {
@@ -69,11 +183,79 @@ a:focus {
     vertical-align: middle !important;
 }
 
+.table.table-hover tbody tr:hover {
+    background: rgba(255, 233, 179, 0.39);
+}
+
 .table td, .table th {
     text-align: center;
-    padding: .2rem .3rem;
+    padding: .5rem;
 }
 
 .table td a {
     padding: 0 5px
+}
+
+.form-group:not(:last-child) {
+    margin-bottom: 1.2rem;
+}
+
+.form-input {
+    border-color: #efefef;
+    border-radius: .2rem;
+    padding: .5rem;
+    height: 2.5rem;
+}
+
+.form-input:focus, .has-success .form-input, .has-success .form-input:focus {
+    border-color: #27282d;
+    color: #27282d;
+    box-shadow: none;
+    transition-duration: .5s
+}
+
+.btn {
+    border-radius: .3rem;
+    height: auto !important;
+}
+
+.btn.btn-lg {
+    font-size: 1.2rem;
+    padding: .5rem 1rem;
+}
+
+.modal {
+    padding: 0;
+}
+
+.modal.active .modal-overlay {
+    background-color: rgba(0, 0, 0, .6);
+}
+
+.modal.modal-sm .modal-container {
+    max-width: 380px;
+}
+
+.modal-container {
+    border-radius: .2rem;
+}
+
+.modal-container .modal-body, .modal-container .modal-header {
+    padding: 1.5rem;
+}
+
+.modal-container .modal-header {
+    padding-bottom: 0;
+}
+
+.modal-container .modal-header .btn.btn-clear {
+    font-size: 1.4rem;
+    width: auto;
+    margin: 0;
+}
+
+.chip {
+    border-radius: .3rem;
+    padding: .3rem .5rem;
+    height: auto;
 }
