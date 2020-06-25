@@ -4,7 +4,8 @@ import time
 from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_basicauth import BasicAuth
 
-from common import get_users, LICENSES_MAP, enabled_user, get_user, create_user, delete_user, get_users_page
+from common import get_users, LICENSES_MAP, enabled_user, get_user, create_user, delete_user, get_users_page, \
+    get_accounts
 from config import *
 
 theme = 'default'
@@ -62,7 +63,7 @@ def user_action(account, uid, action):
 @app.route('/<account>/<page>')
 @basic_auth.required
 def index(account=None, page=None):
-    accounts = ['linbing01', 'vpsmm', 'liyujuan']
+    accounts = get_accounts()
     if accounts and len(accounts):
         _account = accounts[0]
         if not account:
