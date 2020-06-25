@@ -61,6 +61,7 @@ def user_action(account, uid, action):
 @app.route('/')
 @app.route('/<account>')
 @app.route('/<account>/<page>')
+@basic_auth.required
 def index(account=None, page=None):
     accounts = get_accounts()
     if accounts and len(accounts):

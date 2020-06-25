@@ -114,7 +114,7 @@ class OneDrive:
     def get_users(self, **kwargs):
         # id,displayName,accountEnabled,userPrincipalName,assignedLicenses
         params = {'$select': '',
-                  '$expand': 'memberOf', '$top': 5, '$orderBy': 'displayName desc'}
+                  '$expand': 'memberOf', '$top': 20, '$orderBy': 'displayName desc'}
         params.update(kwargs)
         self._api_base_url = self._api_base_url.replace('v1.0', 'beta')
         return self.api('/users', params=params)
