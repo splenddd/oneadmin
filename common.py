@@ -123,7 +123,7 @@ def get_access(account, db):
 
         document['access_token'] = data['access_token']
         document['expires_time'] = not_time + 3500
-        if data['refresh_token']:
+        if data.get('refresh_token'):
             document['refresh_token'] = data['refresh_token']
         document.save()
     return document
