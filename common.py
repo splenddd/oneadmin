@@ -70,10 +70,10 @@ def enabled_user(account, user_id, status=True):
         return one.enabled_user(user_id, status)
 
 
-def get_role(account, user_id):
+def get_subscribed(account):
     with DB() as db:
         one._drive_access = get_access(account, db)
-        return one.get_role(user_id)
+        return one.get_subscribed()
 
 
 def create_user(account, username, password):
@@ -88,15 +88,40 @@ def delete_user(account, username):
         return one.delete_user(username)
 
 
+def get_files(account, user):
+    with DB() as db:
+        one._drive_access = get_access(account, db)
+        return one.file_list(user)
+
+
+def authorize_url(client_id, tenant_id):
+    return one.authorize_url(client_id=client_id, tenant_id=tenant_id)
+
+
+def install_admin(org, **kwargs):
+    if kwargs.get('auth_type') == 'oauth':
+        data = one.fetch_token(**kwargs)
+    else:
+        data = one.get_ms_token(**kwargs)
+    kwargs.update(data)
+    kwargs['_id'] = f'one_drive_admin_{org}_session'
+    kwargs['expires_time'] = int(time.time()) + 3500
+    del kwargs['code']
+    with DB() as db:
+        return db.create_document(kwargs)
+
+
 def get_access(account, db):
     _id = f'one_drive_admin_{account}_session'
     document = db[_id]
-
     not_time = int(time.time())
     if document['expires_time'] < not_time:
-        data = one.refresh_token(**document)
+        if document['auth_type'] == 'oauth':
+            data = one.refresh_token(**document)
+        else:
+            data = one.get_ms_token(**document)
+
         document['access_token'] = data['access_token']
-        document['auth_type'] = 'oauth'
         document['expires_time'] = not_time + 3500
         if data['refresh_token']:
             document['refresh_token'] = data['refresh_token']

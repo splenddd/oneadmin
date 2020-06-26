@@ -76,6 +76,27 @@ a:visited {
     text-decoration: none !important;
 }
 
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 300;
+    height: 4rem;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+}
+
+.header + .main {
+    padding-top: 10rem;
+}
+
+.header .navbar-brand {
+    font-family: 'satisfy', serif;
+    text-align: center;
+    font-size: 1.6rem;
+    padding: 0 1rem;
+}
+
 .toast {
     position: fixed;
     left: 50%;
@@ -93,7 +114,6 @@ a:visited {
 .main {
     min-height: 100vh;
     position: relative;
-    height: 100%;
     display: flex;
     display: -ms-flexbox;
     -ms-flex-flow: nowrap;
@@ -200,7 +220,7 @@ a:visited {
     margin-bottom: 1.2rem;
 }
 
-.form-input {
+.form-input, .form-select {
     border-color: #efefef;
     border-radius: .2rem;
     padding: .5rem;
@@ -236,6 +256,10 @@ a:visited {
     max-width: 380px;
 }
 
+.modal.modal-md .modal-container {
+    max-width: 640px;
+}
+
 .modal-container {
     border-radius: .2rem;
 }
@@ -258,4 +282,12 @@ a:visited {
     border-radius: .3rem;
     padding: .3rem .5rem;
     height: auto;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-right {
+    text-align: right !important;
 }

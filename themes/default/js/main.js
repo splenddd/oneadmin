@@ -44,5 +44,23 @@ $(function () {
         });
         return false;
     });
-
+    $(document).on('click', '#get-authorize-url', function () {
+        let $this = $(this);
+        let $form = $this.parents('form')
+        $this.addClass('loading');
+        $.post($this.data('href'), $form.serialize(), function (result) {
+            $this.removeClass('loading');
+            console.log(result)
+            $('#authorize').removeClass('d-none').find('a').attr('href', result['url']);
+        });
+    });
+    $(document).on('change', '[name="auth_type"]', function () {
+        let $this = $(this);
+        let $value = $this.val();
+        if ($value === 'application') {
+            $('#get-authorize-url, [name="code"]').parent('.form-group').addClass('d-none');
+        } else {
+            $('#get-authorize-url, [name="code"]').parent('.form-group').removeClass('d-none');
+        }
+    })
 });

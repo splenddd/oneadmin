@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>文件名</th>
+        <th>文件大小</th>
+        <th>创建时间</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if files %}
+    {% for file in files['value'] %}
+    <tr>
+        <td>{{ file.name }}</td>
+        <td>{{ file.size }}</td>
+        <td>{{ file.createdDateTime }}</td>
+        <td>
+            <a class="ajax" data-href="/{{ account }}/{{ user.id }}/delete" href="javascript:void(0);">删除</a>
+            <a href="/{{ account }}/{{ user.id }}/files" target="_blank">文件</a>
+        </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+{% if users and users.get('@odata.nextLink') %}
+<a href="/{{ account }}/page" class="btn btn-lg">下一页</a>
+{% endif %}
+{% endblock %}

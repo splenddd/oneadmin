@@ -3,13 +3,17 @@
 <div class="mb-2">
     <button data-href="/{{ account }}/add" class="btn btn-lg ajax-modal">添加帐号</button>
 </div>
+<div style="margin: 1rem 0;">
+{% for subscribed in subscribed_list %}
+    <p class="chip">{{ subscribed['sku_name'] }} {{ subscribed['units'] }}</p>
+{% endfor %}
+</div>
 <table class="table table-hover">
     <thead>
     <tr>
         <th>用户名</th>
         <th>邮箱</th>
         <th>订阅</th>
-        <th>角色</th>
         <th>状态</th>
         <th></th>
     </tr>
@@ -25,16 +29,12 @@
                <span class="chip">{{ get_licenses(licenses['skuId']) }}</span>
            {% endfor %}
         </td>
-        <td width="20%">
-            {% for member in user['memberOf'] %}
-                <span id="{{ member.id }}" class="chip">{{ member.displayName }}</span>
-            {% endfor %}
-        </td>
         <td><i class="icon {{ 'icon-check text-success' if user.accountEnabled else 'icon-cross text-error' }}"></i></td>
         <td>
             <a class="ajax" data-href="/{{ account }}/{{ user.id }}/{{ 'disabled' if user.accountEnabled else 'enabled' }}" href="javascript:void(0);">{{ '禁用' if user.accountEnabled else '启用' }}</a>
             <a class="ajax" data-href="/{{ account }}/{{ user.id }}/delete" href="javascript:void(0);">删除</a>
-{#            <a class="ajax" data-href="/{{ account }}/{{ user.id }}/detail" href="javascript:void(0);">详情</a>#}
+            <a class="ajax-modal" data-href="/{{ account }}/{{ user.id }}/detail" href="javascript:void(0);">详情</a>
+            <a href="/{{ account }}/{{ user.id }}/files" target="_blank">文件</a>
         </td>
     </tr>
     {% endfor %}

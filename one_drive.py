@@ -6,6 +6,13 @@ from urllib.parse import urlencode
 
 import requests
 
+SKU_MAP = {
+    '94763226-9b3c-4e75-a931-5c89701abe66': 'A1教职',
+    '314c4481-f395-4525-be8b-2ec4bb1e9d91': 'A1学生',
+    '6fd2c87f-b296-42f0-b197-1e91e994b900': 'Office 365 E3',
+    'c42b9cae-ea4f-4ab7-9717-81576235ccac': 'Office 365 E5'
+}
+
 
 class OneDrive:
 
@@ -16,7 +23,6 @@ class OneDrive:
         self._token_url = 'https://login.microsoftonline.com/{}/oauth2/v2.0/token'
         self._drive_access = {}
         self._redirect_uri = 'https://py-index.github.io'
-        self._auth_type = 'oauth'
         self._scope = 'offline_access Sites.ReadWrite.All Directory.ReadWrite.All Directory.AccessAsUser.All'
         self.logger = logging.getLogger(self.__class__.__name__)
 
@@ -34,6 +40,14 @@ class OneDrive:
 
     def api_debug(self, api_sub_url, params=None, data=None, method=None, **kwargs):
         return json.dumps(self.api(api_sub_url, params, data, method, **kwargs), indent=4)
+
+    def file_list(self, username):
+        api_params = {'$select': 'id, name, size, folder, createdDateTime', '$top': 20}
+        return self.api(f'/users/{username}/drive/root/children', api_params)
+
+    def delete_file(self, username, file):
+        drive = f'/users/{username}/drive/root'
+        return self.api(f'{drive}:/{file}:/content', method='DELETE')
 
     def enabled_user(self, user, status=True):
         post_data = {
@@ -107,16 +121,16 @@ class OneDrive:
         subscribed_list = self.api('/subscribedSkus')
         result = []
         for i in subscribed_list['value']:
-            result.append({'status': i['capabilityStatus'], 'sku_id': i['skuId'],
-                           'units': f'{i["consumedUnits"]}/{i["prepaidUnits"]["enabled"]}'})
+            if i['capabilityStatus'] == 'Enabled':
+                sku_name = SKU_MAP.get(i['skuId'], i['skuId'])
+                result.append({'status': i['capabilityStatus'], 'sku_id': i['skuId'], 'sku_name': sku_name,
+                               'units': f'{i["consumedUnits"]}/{i["prepaidUnits"]["enabled"]}'})
         return result
 
     def get_users(self, **kwargs):
-        # id,displayName,accountEnabled,userPrincipalName,assignedLicenses
-        params = {'$select': '',
-                  '$expand': 'memberOf', '$top': 20, '$orderBy': 'displayName desc'}
+        params = {'$select': 'id,displayName,accountEnabled,userPrincipalName,assignedLicenses',
+                  '$top': 20}
         params.update(kwargs)
-        self._api_base_url = self._api_base_url.replace('v1.0', 'beta')
         return self.api('/users', params=params)
 
     def delete_user(self, user):
@@ -190,8 +204,7 @@ class OneDrive:
         if response.ok:
             return response
 
-        result = response.json()
-        raise Exception(response.url, response.status_code, result['error']['message'])
+        raise Exception(response.url, response.status_code, response.text)
 
 
 if __name__ == '__main__':

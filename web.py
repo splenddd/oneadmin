@@ -5,7 +5,7 @@ from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_basicauth import BasicAuth
 
 from common import get_users, LICENSES_MAP, enabled_user, get_user, create_user, delete_user, get_users_page, \
-    get_accounts
+    get_accounts, install_admin, authorize_url, get_subscribed, get_files
 from config import ADMIN_NAME, ADMIN_PASSWORD
 
 theme = 'default'
@@ -17,9 +17,29 @@ app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('ADMIN_PASSWORD', ADMIN_PASSW
 basic_auth = BasicAuth(app)
 
 
-@app.route('/install')
-def install():
-    return render_template('install.html')
+@app.route('/install/authorize', methods=['POST'])
+def run_install_authorize():
+    client_id = request.form.get('client_id')
+    tenant_id = request.form.get('tenant_id')
+    url = authorize_url(client_id, tenant_id)
+    return jsonify({'url': url})
+
+
+@app.route('/install', methods=['GET', 'POST'])
+def run_install():
+    if request.method.lower() == 'get':
+        return render_template('install.html')
+
+    org = request.form.get('org')
+    client_id = request.form.get('client_id')
+    client_secret = request.form.get('client_secret')
+    tenant_id = request.form.get('tenant_id')
+    code = request.form.get('code')
+    auth_type = request.form.get('auth_type')
+    object_id = request.form.get('object_id')
+    install_admin(org=org, object_id=object_id, client_id=client_id, client_secret=client_secret, tenant_id=tenant_id,
+                  code=code, auth_type=auth_type)
+    return redirect('/')
 
 
 @app.route('/debug')
@@ -49,11 +69,13 @@ def add_action(account):
 @basic_auth.required
 def user_action(account, uid, action):
     if action == 'detail':
-        return get_user(account, uid)
+        return render_template('user.html', user=get_user(account, uid))
     if action == 'delete':
         return delete_user(account, uid)
     if action == 'role':
         return delete_user(account, uid)
+    if action == 'files':
+        return render_template('files.html', files=get_files(account, uid))
     status = True if action == 'enabled' else False
     return enabled_user(account, uid, status)
 
@@ -75,7 +97,10 @@ def index(account=None, page=None):
             users = get_users_page(account, session[f'{account}_next_page'])
         if users and users.get('@odata.nextLink'):
             session[f'{account}_next_page'] = users['@odata.nextLink']
-        return render_template(f'/index.html', users=users, account=account, accounts=accounts)
+
+        subscribed_list = get_subscribed(account)
+        return render_template(f'/index.html', subscribed_list=subscribed_list, users=users, account=account,
+                               accounts=accounts)
     return redirect('/install')
 
 
