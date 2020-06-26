@@ -5,7 +5,7 @@ from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_basicauth import BasicAuth
 
 from common import get_users, LICENSES_MAP, enabled_user, get_user, create_user, delete_user, get_users_page, \
-    get_accounts, install_admin, authorize_url, get_subscribed, get_files
+    get_accounts, install_admin, authorize_url, get_subscribed, get_files, delete_file, get_file
 from config import ADMIN_NAME, ADMIN_PASSWORD, DEBUG
 
 theme = 'default'
@@ -66,6 +66,16 @@ def add_action(account):
     return redirect(f'/{account}')
 
 
+@app.route('/<account>/<uid>/file/<file_id>/<action>')
+@basic_auth.required
+def file_action(account, uid, file_id, action):
+    if action == 'delete':
+        return delete_file(account, uid, file_id)
+    if action == 'view':
+        return get_file(account, uid, file_id)
+    return redirect(f'/{account}')
+
+
 @app.route('/<account>/<uid>/<action>')
 @basic_auth.required
 def user_action(account, uid, action):
@@ -76,7 +86,9 @@ def user_action(account, uid, action):
     if action == 'role':
         return delete_user(account, uid)
     if action == 'files':
-        return render_template('files.html', files=get_files(account, uid))
+        files = get_files(account, uid)
+        print(files)
+        return render_template('files.html', account=account, uid=uid, files=files)
     status = True if action == 'enabled' else False
     return enabled_user(account, uid, status)
 

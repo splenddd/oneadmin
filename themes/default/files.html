@@ -17,8 +17,8 @@
         <td>{{ file.size }}</td>
         <td>{{ file.createdDateTime }}</td>
         <td>
-            <a class="ajax" data-href="/{{ account }}/{{ user.id }}/delete" href="javascript:void(0);">删除</a>
-            <a href="/{{ account }}/{{ user.id }}/files" target="_blank">文件</a>
+            <a href="/{{ account }}/{{ uid }}/file/{{ file.id }}/view" target="_blank">查看</a>
+            <a href="/{{ account }}/{{ uid }}/file/{{ file.id }}/delete" target="_blank">删除</a>
         </td>
     </tr>
     {% endfor %}

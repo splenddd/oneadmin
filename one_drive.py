@@ -42,12 +42,16 @@ class OneDrive:
         return json.dumps(self.api(api_sub_url, params, data, method, **kwargs), indent=4)
 
     def file_list(self, username):
-        api_params = {'$select': 'id, name, size, folder, createdDateTime', '$top': 20}
+        api_params = {'select': 'id, name, size, folder, createdDateTime, @microsoft.graph.downloadUrl', '$top': 20}
         return self.api(f'/users/{username}/drive/root/children', api_params)
 
     def delete_file(self, username, file):
         drive = f'/users/{username}/drive/root'
         return self.api(f'{drive}:/{file}:/content', method='DELETE')
+
+    def get_file(self, username, file):
+        drive = f'/users/{username}/drive/root'
+        return self.api(f'{drive}:/{file}', params={'$select': 'id,@microsoft.graph.downloadUrl'})
 
     def enabled_user(self, user, status=True):
         post_data = {

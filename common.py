@@ -94,6 +94,18 @@ def get_files(account, user):
         return one.file_list(user)
 
 
+def delete_file(account, user, file_id):
+    with DB() as db:
+        one._drive_access = get_access(account, db)
+        return one.delete_file(user, file_id)
+
+
+def get_file(account, user, file_id):
+    with DB() as db:
+        one._drive_access = get_access(account, db)
+        return one.get_file(user, file_id)
+
+
 def authorize_url(client_id, tenant_id):
     return one.authorize_url(client_id=client_id, tenant_id=tenant_id)
 
