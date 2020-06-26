@@ -15,6 +15,8 @@ app.debug = os.environ.get('DEBUG', DEBUG)
 app.secret_key = '8d9845a4-b6b6-11ea-87d2-acbc327cb9c7'
 app.config['BASIC_AUTH_USERNAME'] = os.environ.get('ADMIN_NAME', ADMIN_NAME)
 app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('ADMIN_PASSWORD', ADMIN_PASSWORD)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['APP_TITLE'] = 'OneAdmin'
 basic_auth = BasicAuth(app)
 
 
@@ -132,6 +134,5 @@ def get_user_licenses():
 
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.config['APP_TITLE'] = 'OneAdmin'
+
     app.run(host='0.0.0.0', port=8080)
