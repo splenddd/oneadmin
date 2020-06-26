@@ -6,11 +6,12 @@ from flask_basicauth import BasicAuth
 
 from common import get_users, LICENSES_MAP, enabled_user, get_user, create_user, delete_user, get_users_page, \
     get_accounts, install_admin, authorize_url, get_subscribed, get_files
-from config import ADMIN_NAME, ADMIN_PASSWORD
+from config import ADMIN_NAME, ADMIN_PASSWORD, DEBUG
 
 theme = 'default'
 template_folder = f'themes/{theme}'
 app = Flask(__name__, template_folder=template_folder, static_folder=template_folder)
+app.debug = os.environ.get('DEBUG', DEBUG)
 app.secret_key = '8d9845a4-b6b6-11ea-87d2-acbc327cb9c7'
 app.config['BASIC_AUTH_USERNAME'] = os.environ.get('ADMIN_NAME', ADMIN_NAME)
 app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('ADMIN_PASSWORD', ADMIN_PASSWORD)
