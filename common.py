@@ -1,6 +1,7 @@
 import os
 import re
 import time
+from datetime import datetime, timezone, timedelta
 
 from cloudant import Cloudant
 
@@ -142,6 +143,9 @@ def get_access(account, db):
 
 
 def update():
+    utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
+    bj_dt = utc_dt.astimezone(timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M:%S')
+
     with DB() as db:
         for document in db:
             if document['auth_type'] == 'oauth':
@@ -151,7 +155,7 @@ def update():
 
             document['access_token'] = data['access_token']
             document['expires_time'] = int(time.time()) + 3500
-            document['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            document['update_time'] = bj_dt
             if data.get('refresh_token'):
                 document['refresh_token'] = data['refresh_token']
             document.save()
