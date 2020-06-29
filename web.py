@@ -5,7 +5,7 @@ from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_basicauth import BasicAuth
 
 from common import get_users, LICENSES_MAP, enabled_user, get_user, create_user, delete_user, get_users_page, \
-    get_accounts, install_admin, authorize_url, get_subscribed, get_files, delete_file, get_file
+    get_accounts, install_admin, authorize_url, get_subscribed, get_files, delete_file, get_file, update
 from config import ADMIN_NAME, ADMIN_PASSWORD, DEBUG
 
 theme = 'default'
@@ -18,6 +18,12 @@ app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('ADMIN_PASSWORD', ADMIN_PASSW
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['APP_TITLE'] = 'OneAdmin'
 basic_auth = BasicAuth(app)
+
+
+@app.route('/update')
+def update_token():
+    update()
+    return 'done'
 
 
 @app.route('/install/authorize', methods=['POST'])

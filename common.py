@@ -139,3 +139,19 @@ def get_access(account, db):
             document['refresh_token'] = data['refresh_token']
         document.save()
     return document
+
+
+def update():
+    with DB() as db:
+        for document in db:
+            if document['auth_type'] == 'oauth':
+                data = one.refresh_token(**document)
+            else:
+                data = one.get_ms_token(**document)
+
+            document['access_token'] = data['access_token']
+            document['expires_time'] = int(time.time()) + 3500
+            document['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            if data.get('refresh_token'):
+                document['refresh_token'] = data['refresh_token']
+            document.save()
