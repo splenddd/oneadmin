@@ -21,14 +21,13 @@ class OneDrive:
         self.http = requests.session()
         self._auth_url = 'https://login.microsoftonline.com/{}/oauth2/v2.0/authorize'
         self._token_url = 'https://login.microsoftonline.com/{}/oauth2/v2.0/token'
-        self._drive_access = {}
+        self.access_token = None
         self._redirect_uri = 'https://py-index.github.io'
         self._scope = 'offline_access Sites.ReadWrite.All Directory.ReadWrite.All Directory.AccessAsUser.All'
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def api(self, api_sub_url, params=None, data=None, method=None, **kwargs):
-        self.http.headers['Authorization'] = "Bearer {}".format(self._drive_access.get('access_token'))
-
+        self.http.headers['Authorization'] = "Bearer {}".format(self.access_token)
         if api_sub_url.find('http') == -1:
             url = '{}/{}'.format(self._api_base_url.strip('/'), api_sub_url.strip('/'))
         else:
@@ -40,6 +39,9 @@ class OneDrive:
 
     def api_debug(self, api_sub_url, params=None, data=None, method=None, **kwargs):
         return json.dumps(self.api(api_sub_url, params, data, method, **kwargs), indent=4)
+
+    def sites(self):
+        self.api('sites', params={'search': '*'})
 
     def file_list(self, username):
         api_params = {'select': 'id, name, size, folder, createdDateTime, @microsoft.graph.downloadUrl', '$top': 20}

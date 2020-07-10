@@ -17,8 +17,8 @@
         <td>{{ file.size }}</td>
         <td>{{ file.createdDateTime }}</td>
         <td>
-            <a href="/{{ account }}/{{ uid }}/file/{{ file.id }}/view" target="_blank">查看</a>
-            <a href="/{{ account }}/{{ uid }}/file/{{ file.id }}/delete" target="_blank">删除</a>
+            <a href="/{{ org_name }}/{{ uid }}/file/{{ file.id }}/view" target="_blank">查看</a>
+            <a href="/{{ org_name }}/{{ uid }}/file/{{ file.id }}/delete" target="_blank">删除</a>
         </td>
     </tr>
     {% endfor %}
@@ -26,6 +26,6 @@
     </tbody>
 </table>
 {% if users and users.get('@odata.nextLink') %}
-<a href="/{{ account }}/page" class="btn btn-lg">下一页</a>
+<a href="/{{ org_name }}/page" class="btn btn-lg">下一页</a>
 {% endif %}
 {% endblock %}
