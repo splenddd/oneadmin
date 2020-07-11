@@ -26,7 +26,7 @@ $(function () {
 
     $(document).on('click', '.ajax-modal', function () {
         let $this = $(this);
-        let url = $this.data('href');
+        let url = $this.data('href') || $this.attr('href');
         $.get(url, function (html) {
             let $container = $("body").find('.modal-container')
             if (!$container.length) {

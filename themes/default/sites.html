@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>站点</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if sites %}
+    {% for site in sites['value'] %}
+    <tr>
+        <td>{{ site.name }}</td>
+        <td>
+            <a href="{{ url_for('files', uid=site.id, org_name=org_name, drive='site') }}">文件</a>
+            <a href="{{ url_for('files', uid=site.id, org_name=org_name, drive='site') }}" target="_blank">删除</a>
+        </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+{% endblock %}

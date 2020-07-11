@@ -2,6 +2,7 @@
 {% block content %}
 <div class="mb-2">
     <button data-href="/{{ org_name }}/add" class="btn btn-lg ajax-modal">添加帐号 {{ g.test }}</button>
+    <a class="btn btn-lg" href="/{{ org_name }}/sites">站点</a>
 </div>
 <div style="margin: 1rem 0;">
 {% for subscribed in subscribed_list %}
@@ -31,11 +32,12 @@
         </td>
         <td><i class="icon {{ 'icon-check text-success' if user.accountEnabled else 'icon-cross text-error' }}"></i></td>
         <td>
-            <a class="ajax" data-href="/{{ org_name }}/{{ user.id }}/{{ 'disabled' if user.accountEnabled else 'enabled' }}" href="javascript:void(0);">{{ '禁用' if user.accountEnabled else '启用' }}</a>
-            <a class="ajax" data-href="/{{ org_name }}/{{ user.id }}/delete" href="javascript:void(0);">删除</a>
-            <a class="ajax-modal" data-href="/{{ org_name }}/{{ user.id }}/detail" href="javascript:void(0);">详情</a>
-            <a href="/{{ org_name }}/{{ user.id }}/files" target="_blank">one drive</a>
-            <a href="/{{ org_name }}/{{ user.id }}/sites" target="_blank">sites</a>
+            {% if g.one_type == 'oauth' %}
+            <a class="ajax" data-href="{{ url_for('user_action', uid=user.id, org_name=org_name, action='disabled' if user.accountEnabled else 'enabled') }}" href="javascript:void(0);">{{ '禁用' if user.accountEnabled else '启用' }}</a>
+            <a class="ajax" data-href="{{ url_for('user_action', uid=user.id, org_name=org_name, action='delete') }}" href="javascript:void(0);">删除</a>
+            {% endif %}
+{#            <a class="ajax-modal" data-href="{{ url_for('user_action', uid=user.id, org_name=org_name, action='detail') }}" href="javascript:void(0);">详情</a>#}
+            <a href="{{ url_for('files', uid=user.id, org_name=org_name, drive='drive') }}">One Drive</a>
         </td>
     </tr>
     {% endfor %}

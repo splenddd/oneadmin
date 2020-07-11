@@ -13,12 +13,11 @@
     {% if files %}
     {% for file in files['value'] %}
     <tr>
-        <td>{{ file.name }}</td>
-        <td>{{ file.size }}</td>
+        <td><a href="{{ url_for(request.endpoint, uid=uid, drive=drive, org_name=org_name, folder=get_folder(folder, file.name)) if file.folder else 'javascript:void(0);' }}">{{ file.name }}</a></td>
+        <td>{{ file_size(file.size) }}</td>
         <td>{{ file.createdDateTime }}</td>
         <td>
-            <a href="/{{ org_name }}/{{ uid }}/file/{{ file.id }}/view" target="_blank">查看</a>
-            <a href="/{{ org_name }}/{{ uid }}/file/{{ file.id }}/delete" target="_blank">删除</a>
+            <a href="{{ url_for('delete_file', uid=uid, drive=drive, org_name=org_name, file_id=get_folder(folder, file.name)) }}">删除</a>
         </td>
     </tr>
     {% endfor %}

@@ -33,6 +33,8 @@ class OneDrive:
         else:
             url = api_sub_url
         response = self.fetch(url, data=data, method=method, params=params, **kwargs)
+        if response.status_code == 204:
+            return {'status_code': response.status_code}
         if len(response.content) > 1:
             return response.json()
         return {'status_code': response.status_code}
@@ -41,15 +43,25 @@ class OneDrive:
         return json.dumps(self.api(api_sub_url, params, data, method, **kwargs), indent=4)
 
     def sites(self):
-        self.api('sites', params={'search': '*'})
+        return self.api('sites', params={'search': '*'})
 
-    def file_list(self, username):
-        api_params = {'select': 'id, name, size, folder, createdDateTime, @microsoft.graph.downloadUrl', '$top': 20}
-        return self.api(f'/users/{username}/drive/root/children', api_params)
+    def file_list(self, username, site=False, folder=None):
+        dest = '/children'
+        if folder and folder != '/':
+            dest = ':/{}:/children'.format(folder)
 
-    def delete_file(self, username, file):
         drive = f'/users/{username}/drive/root'
-        return self.api(f'{drive}:/{file}:/content', method='DELETE')
+        if site:
+            drive = f'/sites/{username}/drive/root'
+
+        api_params = {'select': 'id, name, size, folder, createdDateTime, @microsoft.graph.downloadUrl', '$top': 20}
+        return self.api(f'{drive}{dest}', api_params)
+
+    def delete_file(self, username, file, site=False):
+        drive = f'/users/{username}/drive/root'
+        if site:
+            drive = f'/sites/{username}/drive/root'
+        return self.api(f'{drive}:/{file}', method='DELETE', timeout=10)
 
     def get_file(self, username, file):
         drive = f'/users/{username}/drive/root'
