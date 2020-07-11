@@ -89,8 +89,9 @@ class OneDrive:
     def create_user(self, **kwargs):
         _subscribed = random.choice(self.get_subscribed())
         domain = self.get_default_domain()
-        password = kwargs.get('password', ''.join(
-            random.choices(string.ascii_letters + string.digits + '!#$%&()*+-/:;<=>?@', k=10)))
+        password = kwargs.get('password')
+        if not password:
+            ''.join(random.choices(string.ascii_letters + string.digits + '!#$%&()*+-/:;<=>?@', k=10))
         username = kwargs.get('username', ''.join(random.choices(string.ascii_letters, k=6)))
         user_email = f'{username}@{domain}'
         post_data = {

@@ -7,7 +7,7 @@
         </div>
         <div class="modal-body">
             <div class="content">
-                <form method="post" action="/{{ account }}/add">
+                <form method="post" action="{{ url_for('user_action', org_name=org_name, uid='user', action='add') }}">
                     <div class="form-group">
                         <input class="form-input" type="text" name="username" placeholder="用户名">
                     </div>

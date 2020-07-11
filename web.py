@@ -70,7 +70,7 @@ def users(org_name):
     return render_template('/user.html', users=_users, subscribed_list=subscribed_list, org_name=org_name)
 
 
-@app.route('/<org_name>/<uid>/<action>')
+@app.route('/<org_name>/<uid>/<action>', methods=['GET', 'POST'])
 @basic_auth.required
 def user_action(org_name, uid, action):
     if action == 'detail':
@@ -83,7 +83,13 @@ def user_action(org_name, uid, action):
     if action == 'enabled':
         return one_admin.enabled_user(org_name, uid, True)
 
-    return redirect(url_for('users', org_name=org_name))
+    if action == 'add' and request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        one_admin.create_user(org_name, username=username, password=password)
+        return redirect(url_for('users', org_name=org_name))
+
+    return render_template('/create_user.html', org_name=org_name)
 
 
 @app.route('/<org_name>/<drive>/<uid>/files')

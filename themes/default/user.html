@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="mb-2">
-    <button data-href="/{{ org_name }}/add" class="btn btn-lg ajax-modal">添加帐号 {{ g.test }}</button>
-    <a class="btn btn-lg" href="/{{ org_name }}/sites">站点</a>
+    <button data-href="{{ url_for('user_action', org_name=org_name, uid='user', action='add') }}" class="btn btn-lg ajax-modal">添加帐号</button>
+    <a class="btn btn-lg" href="{{ url_for('sites', org_name=org_name) }}">站点</a>
 </div>
 <div style="margin: 1rem 0;">
 {% for subscribed in subscribed_list %}
