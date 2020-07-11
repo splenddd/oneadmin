@@ -1,7 +1,8 @@
+import datetime
 import os
 import time
 
-from flask import Flask, render_template, redirect, url_for, request, jsonify, g
+from flask import Flask, render_template, redirect, url_for, request, jsonify, g, session
 from flask_basicauth import BasicAuth
 
 from config import ADMIN_NAME, ADMIN_PASSWORD, LICENSES_MAP, DEBUG
@@ -98,9 +99,14 @@ def files(org_name, uid, drive):
     site = drive == 'site'
     g.path = ['files']
     if site:
-        g.path = ['sites', 'files']
+        g.path = ['site files']
     folder = request.args.get('folder', '').strip('/')
     _files = one_admin.file_list(org_name, uid, site=site, folder=folder, app_token=True)
+    # if _files['@odata.nextLink']:
+    #     if session['file_next']:
+    #         session['file_prev'] = session['file_next']
+    #     session['file_next'] = _files['@odata.nextLink']
+
     return render_template('/files.html', folder=folder, uid=uid, files=_files, org_name=org_name, drive=drive)
 
 
@@ -159,6 +165,16 @@ def get_folder():
         return f'{path}/{name}'.strip('/')
 
     return dict(get_folder=get_path)
+
+
+@app.context_processor
+def format_date():
+    def _format_date(date):
+        utc_date = datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ")
+        local_date = utc_date + datetime.timedelta(hours=8)
+        return datetime.datetime.strftime(local_date, '%Y-%m-%d %H:%M:%S')
+
+    return dict(format_date=_format_date)
 
 
 if __name__ == '__main__':

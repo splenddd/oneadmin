@@ -292,3 +292,6 @@ a:visited {
 .text-right {
     text-align: right !important;
 }
+.pagination{
+    padding-bottom: 2rem;
+}

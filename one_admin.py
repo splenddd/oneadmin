@@ -1,3 +1,4 @@
+import json
 import re
 import time
 from datetime import datetime, timezone, timedelta
@@ -53,10 +54,6 @@ class OneAdmin:
             data.append(_org_name)
         return data
 
-    def api(self, org_name, api_url):
-        self.load(org_name)
-        return self.one.api(api_url)
-
     def install(self, **kwargs):
         app_data = self.one.get_ms_token(**kwargs)
         app_data['expires_time'] = int(time.time()) + 3500
@@ -90,4 +87,6 @@ if __name__ == '__main__':
     admin = OneAdmin()
     uid = 'linbing01.sharepoint.com,b049b5fc-c8ea-440e-b49a-39cfa0eab7e3%2C9043205e-d8d9-443e-a033-d6dfdde78ee1'
     file_id = 'XIAOYU/DCC56843DDD3A722/0008.jpg'
-    print(admin.delete_file('linbing01', uid, file_id, site=True, app_token=True))
+    # print(admin.delete_file('linbing01', uid, file_id, site=True, app_token=True))
+    data = admin.file_list('linbing01', uid, site=True, app_token=True, folder='taotu_image')
+    print(json.dumps(data, indent=4))

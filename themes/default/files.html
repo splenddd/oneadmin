@@ -15,7 +15,7 @@
     <tr>
         <td><a href="{{ url_for(request.endpoint, uid=uid, drive=drive, org_name=org_name, folder=get_folder(folder, file.name)) if file.folder else 'javascript:void(0);' }}">{{ file.name }}</a></td>
         <td>{{ file_size(file.size) }}</td>
-        <td>{{ file.createdDateTime }}</td>
+        <td>{{ format_date(file.lastModifiedDateTime) }}</td>
         <td>
             <a href="{{ url_for('delete_file', uid=uid, drive=drive, org_name=org_name, file_id=get_folder(folder, file.name)) }}">删除</a>
         </td>
@@ -24,7 +24,7 @@
     {% endif %}
     </tbody>
 </table>
-{% if users and users.get('@odata.nextLink') %}
-<a href="/{{ org_name }}/page" class="btn btn-lg">下一页</a>
+{% if files and files.get('@odata.nextLink') %}
+<div style="padding-bottom: 2rem;"><a style="" href="" class="btn btn-block">more</a></div>
 {% endif %}
 {% endblock %}

@@ -25,6 +25,7 @@ class OneDrive:
         self._redirect_uri = 'https://py-index.github.io'
         self._scope = 'offline_access Sites.ReadWrite.All Directory.ReadWrite.All Directory.AccessAsUser.All'
         self.logger = logging.getLogger(self.__class__.__name__)
+        self.file_fields = 'id, name, size, folder, audio, video, photo, image, createdDateTime, lastModifiedDateTime'
 
     def api(self, api_sub_url, params=None, data=None, method=None, **kwargs):
         self.http.headers['Authorization'] = "Bearer {}".format(self.access_token)
@@ -45,7 +46,7 @@ class OneDrive:
     def sites(self):
         return self.api('sites', params={'search': '*'})
 
-    def file_list(self, username, site=False, folder=None):
+    def file_list(self, username, site=False, folder=None, fields=None, limit=20):
         dest = '/children'
         if folder and folder != '/':
             dest = ':/{}:/children'.format(folder)
@@ -54,7 +55,10 @@ class OneDrive:
         if site:
             drive = f'/sites/{username}/drive/root'
 
-        api_params = {'select': 'id, name, size, folder, createdDateTime, @microsoft.graph.downloadUrl', '$top': 20}
+        if not fields:
+            fields = self.file_fields
+
+        api_params = {'select': fields, '$top': limit, '$expand': 'thumbnails($select=large)'}
         return self.api(f'{drive}{dest}', api_params)
 
     def delete_file(self, username, file, site=False):
