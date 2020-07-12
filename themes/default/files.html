@@ -13,7 +13,7 @@
     {% if files %}
     {% for file in files['value'] %}
     <tr>
-        <td><a href="{{ url_for(request.endpoint, uid=uid, drive=drive, org_name=org_name, folder=get_folder(folder, file.name)) if file.folder else 'javascript:void(0);' }}">{{ file.name }}{{ '-' + file.folder['childCount'] if file.folder else '' }}</a></td>
+        <td><a href="{{ url_for(request.endpoint, uid=uid, drive=drive, org_name=org_name, folder=get_folder(folder, file.name)) if file.folder else 'javascript:void(0);' }}">{{ file.name }}{{ ' - %s' % file.folder['childCount'] if file.folder else '' }}</a></td>
         <td>{{ file_size(file.size) }}</td>
         <td>{{ format_date(file.lastModifiedDateTime) }}</td>
         <td>
